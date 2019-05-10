@@ -1,0 +1,35 @@
+version: '3.4'
+
+services:
+  tesseract:
+    image: tesseractshadow/tesseract4re
+    volumes:
+      - ./images:/images
+      - ./text:/text
+    entrypoint:
+      - tesseract 
+      - -l
+      - eng+fra
+      # pass in on command line
+      # - /images/filename.tiff 
+      # - /text/filename.txt
+  pdf-to-image:
+    build:
+      context: docker/pdfToImage
+    volumes:
+      - ../sample-data:/sample-data
+      - ./images:/images
+    entrypoint:
+      - "convert"
+      - "-verbose"
+      - "-density"
+      - "300"
+      # - /sample-data/filename.pdf
+      - "-depth"
+      - "8"
+      - "-strip"
+      - "-background"
+      - "white"
+      - "-alpha"
+      - "off"
+      # - /images/filename.tiff
